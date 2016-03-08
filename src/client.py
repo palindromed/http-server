@@ -19,7 +19,7 @@ def client(message):
         part = client.recv(buffer_length)
         decoded_part = part.decode('utf8')
         msg += decoded_part
-        if len(msg) == len(message):
+        if msg == message:
             client.close()
             break
     print(msg)
