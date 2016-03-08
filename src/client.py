@@ -7,8 +7,7 @@ import socket
 
 
 def client(message):
-    if len(message) % 8 == 0:
-        message += '\n'
+    message += "\r\n.\r\n"
     specs = socket.getaddrinfo('127.0.0.1', 5000)
     stream_specs = [i for i in specs if i[1] == socket.SOCK_STREAM][0]
     client = socket.socket(*stream_specs[:3])
@@ -24,6 +23,7 @@ def client(message):
         msg += decoded_part
         if len(part) < buffer_length:
             break
+    msg = msg[:-5]
     print(msg)
     return msg
     # client.close()
