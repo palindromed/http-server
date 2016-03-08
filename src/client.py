@@ -1,13 +1,11 @@
 # _*_ coding: utf-8 _*_
 
 """Create sample client to test echo server functionality."""
-from __future__ import unicode_literals
 import sys
 import socket
 
 
 def client(message):
-    message += "\r\n.\r\n"
     specs = socket.getaddrinfo('127.0.0.1', 5000)
     stream_specs = [i for i in specs if i[1] == socket.SOCK_STREAM][0]
     client = socket.socket(*stream_specs[:3])
@@ -21,12 +19,11 @@ def client(message):
         part = client.recv(buffer_length)
         decoded_part = part.decode('utf8')
         msg += decoded_part
-        if len(part) < buffer_length:
+        if len(msg) == len(message):
+            client.close()
             break
-    msg = msg[:-5]
     print(msg)
     return msg
-    # client.close()
 
 
 if __name__ == "__main__":
