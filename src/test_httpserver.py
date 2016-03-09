@@ -12,3 +12,10 @@ def test_response_error():
     response = response.encode('utf-8')
     assert response_error() == response
 
+
+def test_server():
+    # The server needs to be running for this test
+    from client import client
+    response = client('A message')
+    response = response.split('\n')
+    assert response == ['HTTP/1.1 200 OK', 'Content-Type: text/plain', '\r', "Here's your response."]
