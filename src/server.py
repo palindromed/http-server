@@ -16,6 +16,7 @@ def server():
     try:
         while True:
             msg = ''
+            response = response_ok()
             message_complete = False
             buffer_length = 8
             while not message_complete:
@@ -25,22 +26,29 @@ def server():
                 if len(part) < buffer_length:
                     break
             print(msg)
-            conn.sendall(response_ok())
+            # raise IndexError
+            conn.sendall(response)
             conn.close()
             server.listen(1)
             conn, addr = server.accept()
     except KeyboardInterrupt:
         server.close()
+    except:
+            response = response_error()
+            conn.sendall(response)
+            conn.close()
+            server.listen(1)
+            conn, addr = server.accept()
 
 
 def response_ok():
-    original_response ='HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\nthis is a pretty minimal response'
+    original_response = 'HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\nHere\'s your response.'
     return original_response.encode('utf-8')
-    pass
 
 
 def response_error():
-    pass
+    original_response = 'HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\n\r\nWe\'ve made a huge mistake'
+    return original_response.encode('utf-8')
 
 
 if __name__ == "__main__":
