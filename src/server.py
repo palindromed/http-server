@@ -15,18 +15,33 @@ def server():
 
     try:
         while True:
+            msg = ''
             message_complete = False
             buffer_length = 8
             while not message_complete:
                 part = conn.recv(buffer_length)
-                conn.sendall(part)
+                decoded_part = part.decode('utf8')
+                msg += decoded_part
                 if len(part) < buffer_length:
                     break
+            print(msg)
+            conn.sendall(response_ok())
             conn.close()
             server.listen(1)
             conn, addr = server.accept()
     except KeyboardInterrupt:
         server.close()
+
+
+def response_ok():
+    original_response ='HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\nthis is a pretty minimal response'
+    return original_response.encode('utf-8')
+    pass
+
+
+def response_error():
+    pass
+
 
 if __name__ == "__main__":
     server()

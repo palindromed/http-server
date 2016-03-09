@@ -23,3 +23,11 @@ def test_non_ascii():
     from client import client
     msg = 'über!'
     assert client(msg) == msg
+
+
+def test_response_ok():
+    pass
+
+
+def test_response_error():
+    pass
