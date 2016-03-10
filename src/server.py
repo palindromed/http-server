@@ -46,8 +46,8 @@ def parse_request(argument):
     request_bits = argument.split('\n')
     request = request_bits[0].split()
     print(request[0])
-    # if request[0] == "GET":
-    raise AttributeError('That is wrong and you suck.')
+    if request[0] != "GET":
+        raise AttributeError('That is wrong and you suck.')
 
 
 def response_ok():

@@ -29,5 +29,5 @@ def test_parse_method():
     """Test that server checks HTTP requests for GET method."""
     from server import parse_request
     with pytest.raises(AttributeError):
-        argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+        argument = "BLET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
         parse_request(argument)
