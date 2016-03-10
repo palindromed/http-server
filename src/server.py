@@ -26,7 +26,7 @@ def server():
                 if len(part) < buffer_length:
                     break
             print(msg)
-            # raise IndexError
+            # parse_request(msg)
             conn.sendall(response)
             conn.close()
             server.listen(1)
@@ -39,6 +39,15 @@ def server():
             conn.close()
             server.listen(1)
             conn, addr = server.accept()
+
+
+def parse_request(argument):
+    """Check whether message is proper HTTP request."""
+    request_bits = argument.split('\n')
+    request = request_bits[0].split()
+    print(request[0])
+    # if request[0] == "GET":
+    raise AttributeError('That is wrong and you suck.')
 
 
 def response_ok():
