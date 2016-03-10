@@ -25,9 +25,25 @@ argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n
 #     assert response == ['HTTP/1.1 200 OK', 'Content-Type: text/plain', '\r', "Here's your response."]
 
 
-def test_parse_method():
+def test_parse_method_0():
     """Test that server checks HTTP requests for GET method."""
     from server import parse_request
     with pytest.raises(AttributeError):
         argument = "BLET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+        parse_request(argument)
+
+
+def test_parse_method_1():
+    """Test that server checks HTTP requests for correct HTTP version."""
+    from server import parse_request
+    with pytest.raises(AttributeError):
+        argument = "GET /path/to/index.html HTTP/1.0\r\nHost: www.mysite1.com:80\r\n\r\n"
+        parse_request(argument)
+
+
+def test_parse_method_2():
+    """Test that server checks HTTP requests for Host header."""
+    from server import parse_request
+    with pytest.raises(AttributeError):
+        argument = "GET /path/to/index.html HTTP/1.1\r\nHoot: www.mysite1.com:80\r\n\r\n"
         parse_request(argument)
