@@ -47,3 +47,12 @@ def test_parse_method_2():
     with pytest.raises(AttributeError):
         argument = "GET /path/to/index.html HTTP/1.1\r\nHoot: www.mysite1.com:80\r\n\r\n"
         parse_request(argument)
+
+
+def test_good_request():
+    """Test that server returns appropriate response to a good request"""
+    from server import parse_request
+    request = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+    response = parse_request(request)
+    response = response.decode('utf-8').split('\n')
+    assert '/path/to/index.html' == response[3]
