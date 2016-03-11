@@ -52,13 +52,13 @@ def server():
 def parse_request(argument):
     """Check whether message is proper HTTP request."""
     request_bits = argument.split('\n')
-    print(request_bits)
+    #print(request_bits)
     request = request_bits[0].split()
-    print(request)
+    #print(request)
     host = request_bits[1].split()
-    print(host)
+    #print(host)
     path = request[1]
-    print(path)
+    #print(path)
     if request[0] != "GET":
         raise NameError('Only GET method available here.')
     elif request[2] != "HTTP/1.1":
@@ -86,7 +86,7 @@ def resolve_uri(path):
         file = io.open(path, encoding='utf-8')
         body = file.read()
         file.close()
-        resolved_response = (file_type, body)
+        resolved_response = ("text/plain", body)
         return resolved_response
     else:
         raise OSError
@@ -96,7 +96,8 @@ def resolve_uri(path):
 
 
 def response_ok(stuff):
-    original_response = 'HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\n{}'.format(stuff)
+
+    original_response = 'HTTP/1.1 200 OK\nContent-Type: {}\n\r\n{}'.format(stuff[0], stuff[1])
     return original_response.encode('utf-8')
 
 
