@@ -2,19 +2,24 @@ import pytest
 
 argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
 
+ERROR_RESPONSES = [(["405", "Method not allowed"], ),
+                   (["403", "Forbidden"], ),
+                   (["400", "Bad Request"],)]
 
-# def test_response_ok():
-#     from server import response_ok
-#     response = 'HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\nHere\'s your response.'
-#     response = response.encode('utf-8')
-#     assert response_ok() == response
+def test_response_ok():
+    from server import response_ok
+    result = "/test/path"
+    response = response_ok("/test/path")
+    response = response.decode('utf-8')
+    split_response = response.split('\n')
+    assert result == split_response[3]
 
-
-# def test_response_error():
-#     from server import response_error
-#     response = 'HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\n\r\nWe\'ve made a huge mistake'
-#     response = response.encode('utf-8')
-#     assert response_error() == response
+def test_response_error():
+    from server import response_error
+    response = response_error("405", "Method not allowed")
+    response = response.decode('utf-8')
+    slit_response = response[9:12]
+    assert "405" == slit_response
 
 
 # def test_server():
@@ -28,7 +33,7 @@ argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n
 def test_parse_method_0():
     """Test that server checks HTTP requests for GET method."""
     from server import parse_request
-    with pytest.raises(AttributeError):
+    with pytest.raises(NameError):
         argument = "BLET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
         parse_request(argument)
 
@@ -44,7 +49,7 @@ def test_parse_method_1():
 def test_parse_method_2():
     """Test that server checks HTTP requests for Host header."""
     from server import parse_request
-    with pytest.raises(AttributeError):
+    with pytest.raises(LookupError):
         argument = "GET /path/to/index.html HTTP/1.1\r\nHoot: www.mysite1.com:80\r\n\r\n"
         parse_request(argument)
 
