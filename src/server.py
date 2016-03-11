@@ -70,12 +70,12 @@ def parse_request(argument):
 
 
 def response_ok(path):
-    original_response = 'HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\n{}'.format(path)
+    original_response = 'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n{}'.format(path)
     return original_response.encode('utf-8')
 
 
 def response_error(code, reason):
-    original_response = 'HTTP/1.1 {0} {1}\nContent-Type: text/plain\n\r\nYou\'ve made a huge mistake'.format(code, reason)
+    original_response = 'HTTP/1.1 {0} {1}\r\nContent-Type: text/plain\r\n\r\nYou\'ve made a huge mistake'.format(code, reason)
     return original_response.encode('utf-8')
 
 
