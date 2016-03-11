@@ -26,6 +26,8 @@ ERROR_RESPONSES = [(["405", "Method not allowed"], ),
                    (["403", "Forbidden"], ),
                    (["400", "Bad Request"],)]
 
+
+
 def test_response_ok():
     from server import response_ok
     result = "/test/path"
