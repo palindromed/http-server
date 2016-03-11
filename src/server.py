@@ -3,6 +3,9 @@
 import socket
 import os
 import io
+import mimetypes
+
+mimetypes.init()
 
 
 def server():
@@ -18,7 +21,6 @@ def server():
     try:
         while True:
             msg = ''
-            # response = response_ok()
             message_complete = False
             buffer_length = 8
             while not message_complete:
@@ -52,13 +54,9 @@ def server():
 def parse_request(argument):
     """Check whether message is proper HTTP request."""
     request_bits = argument.split('\n')
-    #print(request_bits)
     request = request_bits[0].split()
-    #print(request)
     host = request_bits[1].split()
-    #print(host)
     path = request[1]
-    #print(path)
     if request[0] != "GET":
         raise NameError('Only GET method available here.')
     elif request[2] != "HTTP/1.1":
@@ -67,7 +65,6 @@ def parse_request(argument):
         raise LookupError('You need to specify a host.')
     else:
         return path
-
 
 
 def resolve_uri(path):
@@ -79,31 +76,40 @@ def resolve_uri(path):
         contents += "</ul>"
         resolved_response = ("text/html", contents)
         return resolved_response
-        # response_ok()
     elif os.path.isfile(path):
-        file_type = path.split('.')
-        file_type = file_type[-1]
-        file = io.open(path, encoding='utf-8')
+        file_type = mimetypes.guess_type(path)
+        file = io.open(path, "rb")
         body = file.read()
         file.close()
-        resolved_response = ("text/plain", body)
+        resolved_response = (file_type, body)
         return resolved_response
     else:
         raise OSError
 
-        # response_ok()
-
-
 
 def response_ok(stuff):
-
-    original_response = 'HTTP/1.1 200 OK\nContent-Type: {}\n\r\n{}'.format(stuff[0], stuff[1])
-    return original_response.encode('utf-8')
+    mime_type, content = stuff
+    headers = (
+        'HTTP/1.1 200 OK\r\n'
+        'Content-Type: {}\r\n'
+        'Content-Length: {}\r\n'
+        '\r\n'
+        .format(
+            mime_type,
+            len(content)
+        )
+    )
+    return headers.encode('ascii') + content
 
 
 def response_error(code, reason):
-    original_response = 'HTTP/1.1 {0} {1}\nContent-Type: text/plain\n\r\nYou\'ve made a huge mistake'.format(code, reason)
-    return original_response.encode('utf-8')
+    headers = (
+        'HTTP/1.1 {0} {1}\r\n'
+        'Content-Type: text/plain\r\n'
+        '\r\nYou\'ve made a huge mistake'
+        .format(code, reason)
+    )
+    return headers.encode('utf-8')
 
 
 if __name__ == "__main__":
