@@ -38,6 +38,9 @@ def server():
                 response = response_error("403", "Forbidden")
             except LookupError:
                 response = response_error("400", "Bad Request")
+            except IOError:
+                response = response_error("404", "File Not Found")
+
             conn.sendall(response)
             conn.close()
             server.listen(1)
@@ -69,7 +72,13 @@ def parse_request(argument):
 
 def resolve_uri(path):
     if os.path.isdir(path):
-        pass
+        prebody = os.listdir(path)
+        contents = "<ul>"
+        for i in prebody:
+            contents += "<li>" + i + "</li>"
+        contents += "</ul>"
+        resolved_response = ("text/html", contents)
+        return resolved_response
         # response_ok()
     elif os.path.isfile(path):
         file_type = path.split('.')
@@ -79,6 +88,8 @@ def resolve_uri(path):
         file.close()
         resolved_response = (file_type, body)
         return resolved_response
+    else:
+        raise OSError
 
         # response_ok()
 
