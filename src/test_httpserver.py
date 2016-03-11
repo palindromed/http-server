@@ -1,6 +1,26 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import pytest
 
-argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+FAILED_MESSAGES = [
+    (u"BLET / HTTP/1.1\r\nHost: localhost:5000", NameError),
+    (u"GET / HTTP/1.0\r\nHost: localhost:5000", AttributeError),
+    (u"GET / HTTP/1.1\r\nHoot", LookupError)
+]
+
+ERROR_RESPONSE = [
+    ("200", u"HTTP/1.1 200 OK\r\n"),
+    ("400", u"HTTP/1.1 400 Bad Request\r\n"),
+    ("404", u"HTTP/1.1 404 File Not Found\r\n"),
+    ("405", u"HTTP/1.1 405 Method Not Allowed\r\n"),
+
+]
+
+
+SUCCESS_RESPONSE = [(u"GET / HTTP/1.1\r\nHost: localhost:5000", "/")]
+
+
+argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.bananagrabber.com:80\r\n\r\n"
 
 ERROR_RESPONSES = [(["405", "Method not allowed"], ),
                    (["403", "Forbidden"], ),
@@ -34,7 +54,7 @@ def test_parse_method_0():
     """Test that server checks HTTP requests for GET method."""
     from server import parse_request
     with pytest.raises(NameError):
-        argument = "BLET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+        argument = "BLET /path/to/index.html HTTP/1.1\r\nHost: www.bananagrabber.com:80\r\n\r\n"
         parse_request(argument)
 
 
@@ -42,7 +62,7 @@ def test_parse_method_1():
     """Test that server checks HTTP requests for correct HTTP version."""
     from server import parse_request
     with pytest.raises(AttributeError):
-        argument = "GET /path/to/index.html HTTP/1.0\r\nHost: www.mysite1.com:80\r\n\r\n"
+        argument = "GET /path/to/index.html HTTP/1.0\r\nHost: www.bananagrabber.com:80\r\n\r\n"
         parse_request(argument)
 
 
@@ -50,10 +70,9 @@ def test_parse_method_2():
     """Test that server checks HTTP requests for Host header."""
     from server import parse_request
     with pytest.raises(LookupError):
-        argument = "GET /path/to/index.html HTTP/1.1\r\nHoot: www.mysite1.com:80\r\n\r\n"
+        argument = "GET /path/to/index.html HTTP/1.1\r\nHoot: www.bananagrabber.com:80\r\n\r\n"
         parse_request(argument)
 
 
 def test_resolve_uri():
     """Test that function parses URI, returns correct content."""
-

@@ -33,7 +33,7 @@ def server():
                 get_stuff = resolve_uri(path)
                 response = response_ok(get_stuff)
             except NameError:
-                response = response_error("405", "Method not allowed")
+                response = response_error("405", "Method Not Allowed")
             except AttributeError:
                 response = response_error("403", "Forbidden")
             except LookupError:
@@ -98,6 +98,7 @@ def resolve_uri(path):
 def response_ok(stuff):
     original_response = 'HTTP/1.1 200 OK\nContent-Type: text/plain\n\r\n{}'.format(stuff)
     return original_response.encode('utf-8')
+
 
 
 def response_error(code, reason):
