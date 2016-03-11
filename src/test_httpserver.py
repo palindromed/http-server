@@ -54,6 +54,17 @@ def test_parse_method_2():
         parse_request(argument)
 
 
+def test_good_request():
+    """Test that server returns appropriate response to a good request"""
+    from server import parse_request
+    request = "GET /webroot/sample.txt HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+    response = parse_request(request)
+    response = response.decode('utf-8').split('\n')
+    assert '/webroot/sample.txt' == response[3]
+
+
 def test_resolve_uri():
     """Test that function parses URI, returns correct content."""
+    pass
+
 
