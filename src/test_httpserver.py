@@ -52,3 +52,8 @@ def test_parse_method_2():
     with pytest.raises(LookupError):
         argument = "GET /path/to/index.html HTTP/1.1\r\nHoot: www.mysite1.com:80\r\n\r\n"
         parse_request(argument)
+
+
+def test_resolve_uri():
+    """Test that function parses URI, returns correct content."""
+
