@@ -78,7 +78,6 @@ def resolve_uri(path):
         return resolved_response
     elif os.path.isfile(path):
         file_type = mimetypes.guess_type(path)[0]
-        print(file_type)
         file = io.open(path, "rb")
         body = file.read()
         file.close()
