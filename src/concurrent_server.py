@@ -57,6 +57,7 @@ def resolve_uri(path):
         for i in prebody:
             contents += "<li>" + i + "</li>"
         contents += "</ul>"
+        contents = contents.encode('ascii')
         resolved_response = ("text/html", contents)
         return resolved_response
     elif os.path.isfile(path):
@@ -82,7 +83,8 @@ def response_ok(stuff):
             len(content)
         )
     )
-    return headers.encode('ascii') + content
+    encoded = headers.encode('ascii')
+    return encoded + content
 
 
 def response_error(code, reason):
