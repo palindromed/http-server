@@ -20,15 +20,15 @@ def server():
 
     try:
         while True:
-            msg = ''
+            msg = b''
             message_complete = False
             buffer_length = 8
             while not message_complete:
                 part = conn.recv(buffer_length)
-                decoded_part = part.decode('utf8')
-                msg += decoded_part
+                msg += part
                 if len(part) < buffer_length:
                     break
+            msg = msg.decode('utf8')
             print(msg)
             try:
                 path = parse_request(msg)
