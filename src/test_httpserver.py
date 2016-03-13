@@ -62,12 +62,11 @@ def test_parse_method_2():
         parse_request(argument)
 
 
-def test_parse_request():
-    """Test that server does not raise an error when a good request is reveived"""
+def test_good_request():
+    """Test that a well formed request gets path returned from parsing to a good request"""
     from server import parse_request
     request = "GET /webroot/sample.txt HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
-    response = parse_request(request)
-    assert '/webroot/sample.txt' == response
+    assert parse_request(request) == '/webroot/sample.txt'
 
 
 def test_resolve_uri():
@@ -93,4 +92,3 @@ def test_file_found():
             b"It is three lines long.\n"
             )
     assert resolve_uri(path) == ("text/plain", body)
-
