@@ -59,5 +59,5 @@ def test_good_request():
     from server import parse_request
     request = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
     response = parse_request(request)
-    response = response.decode('utf-8').split('\n')
-    assert '/path/to/index.html' == response[3]
+    response = response.split('\n')
+    assert '/path/to/index.html' == response[0]

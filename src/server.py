@@ -15,16 +15,15 @@ def server():
 
     try:
         while True:
-            msg = ''
-            # response = response_ok()
+            msg = b''
             message_complete = False
             buffer_length = 8
             while not message_complete:
                 part = conn.recv(buffer_length)
-                decoded_part = part.decode('utf8')
-                msg += decoded_part
+                msg += part
                 if len(part) < buffer_length:
                     break
+            msg = msg.decode('utf8')
             print(msg)
             try:
                 path = parse_request(msg)
@@ -37,16 +36,9 @@ def server():
                 response = response_error("400", "Bad Request")
             conn.sendall(response)
             conn.close()
-            server.listen(1)
             conn, addr = server.accept()
     except KeyboardInterrupt:
         server.close()
-    # except:
-    #         response = response_error()
-    #         conn.sendall(response)
-    #         conn.close()
-    #         server.listen(1)
-    #         conn, addr = server.accept()
 
 
 def parse_request(argument):
@@ -70,12 +62,17 @@ def parse_request(argument):
 
 
 def response_ok(path):
-    original_response = 'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n{}'.format(path)
+    original_response = ('HTTP/1.1 200 OK\r\n'
+                         'Content-Type: text/plain\r\n'
+                         '\r\n{}'.format(path))
     return original_response.encode('utf-8')
 
 
 def response_error(code, reason):
-    original_response = 'HTTP/1.1 {0} {1}\r\nContent-Type: text/plain\r\n\r\nYou\'ve made a huge mistake'.format(code, reason)
+    original_response = ('HTTP/1.1 {0} {1}\r\n'
+                         'Content-Type: text/plain\r\n\r\n'
+                         'You\'ve made a huge mistake'
+                         .format(code, reason))
     return original_response.encode('utf-8')
 
 
