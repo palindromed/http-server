@@ -12,18 +12,16 @@ def client(message):
     client.connect(stream_specs[-1])
     client.sendall(message.encode("utf8"))
 
-    msg = ''
+    msg = b''
     message_complete = False
     buffer_length = 8
     while not message_complete:
         part = client.recv(buffer_length)
-        decoded_part = part.decode('utf8')
-        msg += decoded_part
+        msg += part
         if len(part) < buffer_length:
             client.close()
             break
-    print(type(msg))
-    print(msg.split('\n'))
+    msg = msg.decode('utf8')
     return msg
 
 

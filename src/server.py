@@ -20,15 +20,15 @@ def server():
 
     try:
         while True:
-            msg = ''
+            msg = b''
             message_complete = False
             buffer_length = 8
             while not message_complete:
                 part = conn.recv(buffer_length)
-                decoded_part = part.decode('utf8')
-                msg += decoded_part
+                msg += part
                 if len(part) < buffer_length:
                     break
+            msg = msg.decode('utf8')
             print(msg)
             try:
                 path = parse_request(msg)
@@ -45,7 +45,6 @@ def server():
 
             conn.sendall(response)
             conn.close()
-            server.listen(1)
             conn, addr = server.accept()
     except KeyboardInterrupt:
         server.close()
@@ -74,6 +73,7 @@ def resolve_uri(path):
         for i in prebody:
             contents += "<li>" + i + "</li>"
         contents += "</ul>"
+        contents = contents.encode('ascii')
         resolved_response = ("text/html", contents)
         return resolved_response
     elif os.path.isfile(path):
