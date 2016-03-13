@@ -1,10 +1,8 @@
 import pytest
 
-argument = "GET /path/to/index.html HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
 
-ERROR_RESPONSES = [(["405", "Method not allowed"], ),
-                   (["403", "Forbidden"], ),
-                   (["400", "Bad Request"],)]
+SUCCESS_RESPONSE = ("""HTTP/1.1 200 OK\r\nContent-Type: text/plain Content-Type Length: 95\r\n\r\nThis is a very simple text file. Just to show that we can serve it up. It is three lines long.""")
+
 
 DIR_RESP = (b'<ul><li>.DS_Store</li><li>a_web_page.html</li>'
             b'<li>images</li><li>make_time.py</li>'
@@ -18,20 +16,26 @@ DIR_RESP = (b'<ul><li>.DS_Store</li><li>a_web_page.html</li>'
 #     split_response = response.split('\n')
 #     assert result == split_response[3]
 
+
+def test_response_ok():
+    """Test response_ok function."""
+    from server import response_ok
+    request_tuple = ("text/plain", "This is a very simple text file. Just to show that we can serve it up. It is three lines long.".encode('ascii'))
+    SUCCESS_RESPONSE = ("""HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 94\r\n\r\nThis is a very simple text file. Just to show that we can serve it up. It is three lines long.""")
+    response = response_ok(request_tuple)
+    response = response.decode('utf-8')
+    split_response = response.split('\r\n')
+    split_success = SUCCESS_RESPONSE.split('\r\n')
+    assert split_response[1] == split_success[1]
+
+
 def test_response_error():
+    """Test response_error function."""
     from server import response_error
     response = response_error("405", "Method not allowed")
     response = response.decode('utf-8')
     slit_response = response[9:12]
     assert "405" == slit_response
-
-
-# def test_server():
-#     # The server needs to be running for this test
-#     from client import client
-#     response = client('A message')
-#     response = response.split('\n')
-#     assert response == ['HTTP/1.1 200 OK', 'Content-Type: text/plain', '\r', "Here's your response."]
 
 
 def test_parse_method_0():
@@ -89,3 +93,4 @@ def test_file_found():
             b"It is three lines long.\n"
             )
     assert resolve_uri(path) == ("text/plain", body)
+
