@@ -45,7 +45,6 @@ def server():
 
             conn.sendall(response)
             conn.close()
-            server.listen(1)
             conn, addr = server.accept()
     except KeyboardInterrupt:
         server.close()
@@ -74,6 +73,7 @@ def resolve_uri(path):
         for i in prebody:
             contents += "<li>" + i + "</li>"
         contents += "</ul>"
+        contents = contents.encode('ascii')
         resolved_response = ("text/html", contents)
         return resolved_response
     elif os.path.isfile(path):
