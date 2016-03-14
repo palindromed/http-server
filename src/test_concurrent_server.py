@@ -76,6 +76,7 @@ def test_file_not_found():
 def test_file_found():
     """Test that if a file is found, it will be returned."""
     from concurrent_server import resolve_uri
+    # The path tested needs to be an absolute path to file on computer.
     path = "/Users/hannahkrager/http-server/webroot/sample.txt"
     body = (b"This is a very simple text file.\n"
             b"Just to show that we can serve it up.\n"
