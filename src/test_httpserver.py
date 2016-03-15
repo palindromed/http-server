@@ -4,7 +4,7 @@ import pytest
 SUCCESS_RESPONSE = ("""HTTP/1.1 200 OK\r\nContent-Type: text/plain Content-Type Length: 95\r\n\r\nThis is a very simple text file. Just to show that we can serve it up. It is three lines long.""")
 
 
-DIR_RESP = (b'<ul><li>.DS_Store</li><li>a_web_page.html</li>'
+DIR_RESP = (b'<ul><li>a_web_page.html</li>'
             b'<li>images</li><li>make_time.py</li>'
             b'<li>sample.txt</li></ul>')
 
@@ -72,7 +72,7 @@ def test_good_request():
 def test_resolve_uri():
     """Test that function resolves path and returns directory content."""
     from server import resolve_uri
-    path = "/Users/hannahkrager/http-server/webroot/"
+    path = "/"
     assert resolve_uri(path) == ("text/html", DIR_RESP)
 
 
@@ -87,7 +87,7 @@ def test_file_found():
     """Test that if a file is found, it will be returned."""
     from server import resolve_uri
     # The path tested needs to be an absolute path to file on computer.
-    path = "/Users/hannahkrager/http-server/webroot/sample.txt"
+    path = "sample.txt"
     body = (b"This is a very simple text file.\n"
             b"Just to show that we can serve it up.\n"
             b"It is three lines long.\n"

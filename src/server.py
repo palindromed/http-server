@@ -67,6 +67,8 @@ def parse_request(argument):
 
 
 def resolve_uri(path):
+    root_dir = os.path.join(os.path.dirname("webroot/"))
+    path = root_dir + "/" + path
     if os.path.isdir(path):
         prebody = os.listdir(path)
         contents = "<ul>"
