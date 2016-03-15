@@ -64,14 +64,14 @@ def test_parse_method_2():
 def test_good_request():
     """Test that a well formed request gets path returned from parsing to a good request"""
     from server import parse_request
-    request = "GET /webroot/sample.txt HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
-    assert parse_request(request) == '/webroot/sample.txt'
+    request = "GET sample.txt HTTP/1.1\r\nHost: www.mysite1.com:80\r\n\r\n"
+    assert parse_request(request) == 'sample.txt'
 
 
 def test_resolve_uri():
     """Test that function resolves path and returns directory content."""
     from server import resolve_uri
-    path = "/Users/hannahkrager/http-server/webroot/"
+    path = "/"
     assert resolve_uri(path) == ("text/html", DIR_RESP)
 
 
@@ -85,7 +85,7 @@ def test_file_not_found():
 def test_file_found():
     """Test that if a file is found, it will be returned."""
     from server import resolve_uri
-    path = "/Users/hannahkrager/http-server/webroot/sample.txt"
+    path = "sample.txt"
     body = (b"This is a very simple text file.\n"
             b"Just to show that we can serve it up.\n"
             b"It is three lines long.\n"
