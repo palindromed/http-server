@@ -1,8 +1,6 @@
 # _*_ coding: utf-8 _*_
 """Create a server that can handle concurrent messages."""
-import os
-import io
-import mimetypes
+from server import parse_request, resolve_uri, response_ok, response_error
 
 
 def server(socket, address):
@@ -32,68 +30,6 @@ def server(socket, address):
     socket.close()
 
 
-def parse_request(argument):
-    """Check whether message is proper HTTP request."""
-    request_bits = argument.split('\n')
-    request = request_bits[0].split()
-    host = request_bits[1].split()
-    path = request[1]
-    if request[0] != "GET":
-        raise NameError('Only GET method available here.')
-    elif request[2] != "HTTP/1.1":
-        raise AttributeError('We are only using HTTP/1.1.')
-    elif host[0] != "Host:":
-        raise LookupError('You need to specify a host.')
-    else:
-        return path
-
-
-def resolve_uri(path):
-    if os.path.isdir(path):
-        prebody = os.listdir(path)
-        contents = "<ul>"
-        for i in prebody:
-            contents += "<li>" + i + "</li>"
-        contents += "</ul>"
-        contents = contents.encode('ascii')
-        resolved_response = ("text/html", contents)
-        return resolved_response
-    elif os.path.isfile(path):
-        file_type = mimetypes.guess_type(path)[0]
-        file = io.open(path, "rb")
-        body = file.read()
-        file.close()
-        resolved_response = (file_type, body)
-        return resolved_response
-    else:
-        raise OSError
-
-
-def response_ok(stuff):
-    mime_type, content = stuff
-    headers = (
-        'HTTP/1.1 200 OK\r\n'
-        'Content-Type: {}\r\n'
-        'Content-Length: {}\r\n'
-        '\r\n'
-        .format(
-            mime_type,
-            len(content)
-        )
-    )
-    encoded = headers.encode('ascii')
-    return encoded + content
-
-
-def response_error(code, reason):
-    headers = (
-        'HTTP/1.1 {0} {1}\r\n'
-        'Content-Type: text/plain\r\n'
-        '\r\nYou\'ve made a huge mistake'
-        .format(code, reason)
-    )
-    return headers.encode('utf-8')
-
 if __name__ == "__main__":
     from gevent.server import StreamServer
     from gevent.monkey import patch_all
@@ -101,4 +37,3 @@ if __name__ == "__main__":
     server = StreamServer(('127.0.0.1', 5000), server)
     print('Starting server on port 5000')
     server.serve_forever()
-
