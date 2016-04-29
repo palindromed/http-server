@@ -1,0 +1,14 @@
+def resolve_uri(path):
+
+
+    if os.path.isdir(path):
+        return html list as body
+        response_ok()
+    elif os.path.isfile(path):
+        return contents as body
+        response_ok()
+    else
+        raise 404 error
+
+
+
