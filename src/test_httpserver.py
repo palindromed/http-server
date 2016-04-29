@@ -3,7 +3,8 @@ import pytest
 
 SUCCESS_RESPONSE = ("""HTTP/1.1 200 OK\r\nContent-Type: text/plain Content-Type Length: 95\r\n\r\nThis is a very simple text file. Just to show that we can serve it up. It is three lines long.""")
 
-DIR_RESP = (b'<ul><li>.DS_Store</li><li>a_web_page.html</li>'
+
+DIR_RESP = (b'<ul><li>a_web_page.html</li>'
             b'<li>images</li><li>make_time.py</li>'
             b'<li>sample.txt</li></ul>')
 
