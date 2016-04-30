@@ -8,13 +8,13 @@ DIR_RESP = (b'<ul><li>a_web_page.html</li>'
             b'<li>images</li><li>make_time.py</li>'
             b'<li>sample.txt</li></ul>')
 
-# def test_response_ok():
-#     from server import response_ok
-#     result = "/test/path"
-#     response = response_ok("/test/path")
-#     response = response.decode('utf-8')
-#     split_response = response.split('\n')
-#     assert result == split_response[3]
+def test_response_ok():
+    from server import response_ok
+    result = "/test/path"
+    response = response_ok("/test/path")
+    response = response.decode('utf-8')
+    split_response = response.split('\n')
+    assert result == split_response[3]
 
 
 def test_response_ok():
